@@ -7,61 +7,106 @@
 <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 <div class="app">
+
 <header>
-<h1>QR Optical File Receiver</h1>
-<p>Scan sequential QR frames from the laptop screen.</p>
+  <h1>QR Optical File Receiver</h1>
+  <p>Laptop screen → QR → phone camera → file</p>
 </header>
 
 <section class="card">
-<div id="reader"></div>
-<div class="buttons">
-<button id="startButton">Start Camera</button>
-<button id="stopButton" disabled>Stop Camera</button>
-</div>
-<div id="cameraStatus">Camera is stopped.</div>
+  <h2>1. Receiver control</h2>
+
+  <div class="buttons">
+    <button id="cameraButton" class="primary">START CAMERA</button>
+    <button id="startButton" class="success" disabled>START TRANSFER</button>
+    <button id="stopButton" class="secondary" disabled>STOP</button>
+    <button id="resetButton" class="secondary">RESET</button>
+  </div>
+
+  <div id="cameraStatus" class="status">
+    Camera is not running.
+  </div>
+
+  <div id="transferStatus" class="status">
+    Transfer is not started.
+  </div>
 </section>
 
 <section class="card">
-<div class="progress-header">
-<span>Transfer</span><span id="progressText">0 / 0</span>
-</div>
-<div class="progress-bar"><div id="progressFill"></div></div>
+  <h2>2. Camera</h2>
 
-<div class="grid">
-<div><small>File</small><b id="fileName">Waiting...</b></div>
-<div><small>Size</small><b id="fileSize">--</b></div>
-<div><small>Received</small><b id="receivedFrames">0</b></div>
-<div><small>Missing</small><b id="missingFrames">--</b></div>
-<div><small>Duplicates</small><b id="duplicateFrames">0</b></div>
-<div><small>Scan rate</small><b id="scanRate">0.00 fps</b></div>
-</div>
+  <div id="reader"></div>
 
-<div id="message" class="message info">Point the phone camera at the QR code on the laptop.</div>
+  <div class="camera-tip">
+    First press <b>START CAMERA</b>. Then press <b>START TRANSFER</b>.
+    Finally start the QR transmitter on the laptop.
+  </div>
 </section>
 
 <section class="card">
-<h2>Session</h2>
-<div class="grid">
-<div><small>Transfer ID</small><b id="transferId">--</b></div>
-<div><small>SHA-256</small><b id="sha256">--</b></div>
-</div>
-<div class="buttons">
-<button id="resetButton">Reset Transfer</button>
-<button id="downloadButton" class="success" disabled>Download File</button>
-</div>
+  <h2>3. Transfer status</h2>
+
+  <div class="progress-header">
+    <span id="progressText">0 / 0</span>
+    <span id="percentText">0%</span>
+  </div>
+
+  <div class="progress-bar">
+    <div id="progressFill"></div>
+  </div>
+
+  <div class="grid">
+    <div><small>File</small><b id="fileName">Waiting...</b></div>
+    <div><small>Size</small><b id="fileSize">--</b></div>
+    <div><small>Received</small><b id="receivedFrames">0</b></div>
+    <div><small>Missing</small><b id="missingFrames">--</b></div>
+    <div><small>Duplicates</small><b id="duplicateFrames">0</b></div>
+    <div><small>Decoded</small><b id="decodedCount">0</b></div>
+  </div>
+
+  <div id="message" class="message info">
+    Camera is stopped.
+  </div>
+
+  <div class="debug-box">
+    <small>Last decoded QR packet</small>
+    <pre id="lastDecoded">Nothing decoded yet.</pre>
+  </div>
 </section>
 
 <section class="card">
-<details>
-<summary>Missing frames</summary>
-<pre id="missingList">None</pre>
-</details>
+  <h2>4. Session</h2>
+
+  <div class="grid">
+    <div><small>Transfer ID</small><b id="transferId">--</b></div>
+    <div><small>SHA-256</small><b id="sha256">--</b></div>
+    <div><small>Camera</small><b id="cameraName">--</b></div>
+    <div><small>State</small><b id="state">CAMERA OFF</b></div>
+  </div>
+
+  <div class="buttons">
+    <button id="downloadButton" class="success" disabled>
+      DOWNLOAD FILE
+    </button>
+  </div>
 </section>
 
-<footer>QR optical file-transfer receiver</footer>
+<section class="card">
+  <details>
+    <summary>Missing frame numbers</summary>
+    <pre id="missingList">None</pre>
+  </details>
+</section>
+
+<footer>
+  File reconstruction and verification are performed locally in the browser.
+</footer>
+
 </div>
+
 <script src="receiver.js"></script>
 </body>
 </html>
