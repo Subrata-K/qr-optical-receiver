@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QR Optical File Receiver</title>
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+<header>
+<h1>QR Optical File Receiver</h1>
+<p>Scan sequential QR frames from the laptop screen.</p>
+</header>
+
+<section class="card">
+<div id="reader"></div>
+<div class="buttons">
+<button id="startButton">Start Camera</button>
+<button id="stopButton" disabled>Stop Camera</button>
+</div>
+<div id="cameraStatus">Camera is stopped.</div>
+</section>
+
+<section class="card">
+<div class="progress-header">
+<span>Transfer</span><span id="progressText">0 / 0</span>
+</div>
+<div class="progress-bar"><div id="progressFill"></div></div>
+
+<div class="grid">
+<div><small>File</small><b id="fileName">Waiting...</b></div>
+<div><small>Size</small><b id="fileSize">--</b></div>
+<div><small>Received</small><b id="receivedFrames">0</b></div>
+<div><small>Missing</small><b id="missingFrames">--</b></div>
+<div><small>Duplicates</small><b id="duplicateFrames">0</b></div>
+<div><small>Scan rate</small><b id="scanRate">0.00 fps</b></div>
+</div>
+
+<div id="message" class="message info">Point the phone camera at the QR code on the laptop.</div>
+</section>
+
+<section class="card">
+<h2>Session</h2>
+<div class="grid">
+<div><small>Transfer ID</small><b id="transferId">--</b></div>
+<div><small>SHA-256</small><b id="sha256">--</b></div>
+</div>
+<div class="buttons">
+<button id="resetButton">Reset Transfer</button>
+<button id="downloadButton" class="success" disabled>Download File</button>
+</div>
+</section>
+
+<section class="card">
+<details>
+<summary>Missing frames</summary>
+<pre id="missingList">None</pre>
+</details>
+</section>
+
+<footer>QR optical file-transfer receiver</footer>
+</div>
+<script src="receiver.js"></script>
+</body>
+</html>
