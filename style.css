@@ -91,6 +91,14 @@ body {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    display: none; /* Hidden until camera starts */
+}
+
+#cameraVideo.active {
+    display: block;
+}
+
+#cameraCanvas {
     display: none;
 }
 
@@ -101,6 +109,11 @@ body {
     width: 100%;
     height: 100%;
     pointer-events: none;
+    display: none; /* Hidden until camera starts */
+}
+
+#debugCanvas.active {
+    display: block;
 }
 
 .camera-overlay {
@@ -114,6 +127,10 @@ body {
     justify-content: center;
     background: rgba(0,0,0,0.7);
     z-index: 10;
+}
+
+.camera-overlay.hidden {
+    display: none;
 }
 
 .overlay-text {

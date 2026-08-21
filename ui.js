@@ -21,6 +21,8 @@ const UI = (function() {
         elements.ackLabel = document.getElementById('ackLabel');
         elements.cameraOverlay = document.getElementById('cameraOverlay');
         elements.downloadSection = document.getElementById('downloadSection');
+        elements.video = document.getElementById('cameraVideo');
+        elements.debugCanvas = document.getElementById('debugCanvas');
     }
 
     function setStatus(status) {
@@ -55,8 +57,18 @@ const UI = (function() {
     }
 
     function setAckLabel(text) { if (elements.ackLabel) elements.ackLabel.textContent = text; }
-    function showCamera() { if (elements.cameraOverlay) elements.cameraOverlay.style.display = 'none'; }
-    function hideCamera() { if (elements.cameraOverlay) elements.cameraOverlay.style.display = 'flex'; }
+
+    function showCamera() {
+        if (elements.cameraOverlay) elements.cameraOverlay.classList.add('hidden');
+        if (elements.video) elements.video.classList.add('active');
+        if (elements.debugCanvas) elements.debugCanvas.classList.add('active');
+    }
+
+    function hideCamera() {
+        if (elements.cameraOverlay) elements.cameraOverlay.classList.remove('hidden');
+        if (elements.video) elements.video.classList.remove('active');
+        if (elements.debugCanvas) elements.debugCanvas.classList.remove('active');
+    }
 
     function log(message, type) {
         type = type || 'info';

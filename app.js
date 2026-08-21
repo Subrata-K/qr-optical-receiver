@@ -43,24 +43,55 @@ const App = (function() {
             ColorClassifier.setMode(e.target.value);
             UI.log('Classifier changed to ' + e.target.value);
         });
+
+        // HTTPS check
+        if (window.location.protocol !== 'https:' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+            document.getElementById('httpsWarning').style.display = 'block';
+            UI.log('WARNING: Camera requires HTTPS. Current protocol: ' + window.location.protocol, 'error');
+        }
+
+        // Check if getUserMedia is supported
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+            UI.log('ERROR: Your browser does not support camera access. Use Android Chrome.', 'error');
+            showCameraError('Your browser does not support camera access. Please use Android Chrome.');
+            document.getElementById('btnStartCamera').disabled = true;
+        }
+
         UI.log('App initialized. Press Start Camera to begin.');
     }
 
+    function showCameraError(msg) {
+        const el = document.getElementById('cameraError');
+        if (el) {
+            el.textContent = msg;
+            el.style.display = 'block';
+        }
+    }
+
+    function hideCameraError() {
+        const el = document.getElementById('cameraError');
+        if (el) el.style.display = 'none';
+    }
+
     async function startCamera() {
+        UI.log('Starting camera...');
+        hideCameraError();
         try {
             const resolution = document.getElementById('resolutionSelect').value;
             await Camera.start(resolution);
             UI.showCamera();
             UI.setStatus('CAMERA READY');
-            UI.log('Camera started successfully');
+            UI.log('Camera started successfully at ' + video.videoWidth + 'x' + video.videoHeight);
+
             document.getElementById('btnStartCamera').disabled = true;
             document.getElementById('btnCalibrate').disabled = false;
             document.getElementById('btnStop').disabled = false;
+
             Camera.onFrame(processFrame);
             setState(State.CAMERA_INIT);
         } catch (err) {
-            UI.log('Failed to start camera: ' + err.message, 'error');
-            alert('Camera access required. Please allow camera permission.');
+            UI.log('Camera error: ' + err.message, 'error');
+            showCameraError(err.message);
         }
     }
 
