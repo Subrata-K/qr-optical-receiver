@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QR Optical File Receiver v3</title>
+<script src="https://unpkg.com/qrcode-generator@1.4.4/qrcode.js"></script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+<header><h1>QR Optical File Receiver v3</h1><p>Color-code data channel with a duplex webcam ACK return channel.</p></header>
+
+<section class="card">
+<h2>1. Receiver control</h2>
+<div class="buttons">
+<button id="startButton" class="primary">START RECEIVING</button>
+<button id="stopButton" class="secondary" disabled>STOP</button>
+<button id="resetButton" class="secondary">RESET</button>
+</div>
+<div class="row">
+<label for="gridSizeSelect">Code size (must match laptop):</label>
+<select id="gridSizeSelect">
+<option value="small">Small (29x29)</option>
+<option value="medium" selected>Medium (45x45)</option>
+<option value="large">Large (65x65)</option>
+</select>
+</div>
+<div id="cameraStatus" class="status">Receiver is stopped.</div>
+</section>
+
+<section class="card">
+<h2>2. Camera</h2>
+<div id="reader"><video id="videoEl" playsinline muted autoplay></video></div>
+<div class="camera-tip">Point the <b>rear camera</b> at the color code on the laptop. Start with <b>Medium size, 1 KB chunks, 3-5 FPS</b> on the laptop.</div>
+</section>
+
+<section class="card">
+<h2>3. Transfer status</h2>
+<div class="progress-header"><span id="progressText">0 / 0</span><span id="percentText">0%</span></div>
+<div class="progress-bar"><div id="progressFill"></div></div>
+<div class="grid">
+<div><small>File</small><b id="fileName">Waiting...</b></div><div><small>Size</small><b id="fileSize">--</b></div>
+<div><small>Received</small><b id="receivedFrames">0</b></div><div><small>Missing</small><b id="missingFrames">--</b></div>
+<div><small>Duplicates</small><b id="duplicateFrames">0</b></div><div><small>Decoded good/attempts</small><b id="decodedCount">0 / 0</b></div>
+</div>
+<div id="message" class="message info">Press START RECEIVING, allow camera access, then start the laptop transmitter.</div>
+<div class="debug-box"><small>Last decoded packet</small><pre id="lastDecoded">Nothing decoded yet.</pre></div>
+</section>
+
+<section class="card">
+<h2>4. Return channel (ACK to laptop webcam)</h2>
+<div class="row"><label><input type="checkbox" id="ackToggle" checked> Enable duplex ACK</label></div>
+<canvas id="ackCanvas" width="260" height="260"></canvas>
+<div id="ackStatus" class="status">Waiting for first frame...</div>
+<div class="camera-tip">Prop the phone between you and the laptop with the <b>rear camera facing the laptop screen</b>. The phone's own screen will then face back toward the laptop's <b>webcam</b>, which reads this ACK code.</div>
+</section>
+
+<section class="card">
+<h2>5. Session</h2>
+<div class="grid">
+<div><small>Transfer ID</small><b id="transferId">--</b></div><div><small>SHA-256</small><b id="sha256">--</b></div>
+<div><small>Scanner state</small><b id="scannerState">STOPPED</b></div><div></div>
+</div>
+<div class="buttons"><button id="downloadButton" class="success" disabled>DOWNLOAD FILE</button></div>
+</section>
+
+<section class="card"><details><summary>Missing frame numbers</summary><pre id="missingList">None</pre></details></section>
+<footer>All file reconstruction and color-code decoding happen locally in the phone browser.</footer>
+</div>
+<script src="receiver.js"></script>
+</body>
+</html>
