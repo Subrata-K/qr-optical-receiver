@@ -415,7 +415,7 @@ async function startCamera() {
   N_CURRENT = GRID_PRESETS[$('gridSizeSelect').value];
   try {
     $('cameraStatus').textContent = 'Requesting camera permission...';
-    const constraints = { video: { facingMode: { ideal: 'environment' } }, audio: false };
+    const constraints = { video: { facingMode: { ideal: 'user' } }, audio: false };
     videoStream = await navigator.mediaDevices.getUserMedia(constraints);
     const video = $('videoEl');
     video.srcObject = videoStream;
